@@ -1,0 +1,55 @@
+CREATE TABLE [Requests]
+(
+     [ID]                int             NOT NULL ,
+     [OrgC]              varchar(255)    NULL ,
+     [ContactC]          varchar(255)    NOT NULL ,
+     [PhoneC]            varchar(255)    NOT NULL ,
+     [ContactT]          varchar(255)    NOT NULL ,
+     [PhoneT]            varchar(255)    NOT NULL ,
+     [Tr_type]           varchar(255)    NULL ,
+     [Tr_volume]         varchar(255)    NULL ,
+     [Tr_capacity]       varchar(255)    NULL ,
+     [Tr_count]          int             NULL ,
+     [IsReadyDocs]       bool            NOT NULL DEFAULT 'False' ,
+     [IsReadyCustom]     bool            NULL ,
+     [From]              varchar(255)    NULL ,
+     [To]                varchar(255)    NULL ,
+     [FromTime]          datetime        NULL ,
+     [ToTime]            datetime        NULL ,
+     [Notes]             varchar(255)    NULL ,
+     [Status]            varchar(12)     NOT NULL DEFAULT 'Inactive',
+     CONSTRAINT [XPKRequest] PRIMARY KEY NONCLUSTERED ([ID] ASC)
+)
+
+CREATE TABLE [Contractors]
+(
+     [ID]                int             NOT NULL ,
+     [Org]               varchar(255)    NULL ,
+     [Contact]           varchar(255)    NOT NULL ,
+     [Phone]             varchar(255)    NOT NULL ,
+     [Code_exchange]     int             NULL ,
+     [Registration]      varchar(255)    NULL ,
+     [Tr_type]           varchar(5)      NULL ,
+     [Tr_volume]         varchar(5)      NULL ,
+     [Tr_capacity]       varchar(5)      NULL ,
+     [Tr_count]          int             NULL ,
+     [Black_list]        bool            NOT NULL DEFAULT 'False' ,
+     [Notes]             varchar(255)    NULL ,
+     [From]              varchar(255)    NULL ,
+     [To]                varchar(255)    NULL ,
+     [ADR]               bool            NULL ,
+     [CMR]               bool            NULL ,
+     [TIR]               bool            NULL ,
+     [CEMT]              bool            NULL ,
+     CONSTRAINT [XPKContractor] PRIMARY KEY NONCLUSTERED ([ID] ASC)
+)
+
+CREATE TABLE [Logs]
+(
+     [ID]                int             NOT NULL ,
+     [Datetime]          datetime        NOT NULL ,
+     [User]              varchar(255)    NOT NULL ,
+     [Type_of_operation] varchar(255)    NOT NULL ,
+     [ID_of_object]      int             NULL ,
+     CONSTRAINT [XPKLog] PRIMARY KEY NONCLUSTERED ([ID] ASC)
+)
