@@ -44,3 +44,80 @@ std::string ECB(string inp_data, string inp_key)
 
 	return data;
 }
+
+
+std::string CBC(string inp_data, string inp_key, string start_vector)
+{
+	string key = inp_key;
+	string data_help = inp_data;
+	std::cout << '\n';
+	std::cout << data_help;
+
+	string data = data_help;
+	// breack up into 4 16b blocks
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 16; j++) {
+			// encrypt data by key
+			if (key[i * 16 + j] == '1') {
+				if (j % 2 == 0) {
+					data[i * 16 + j] = data_help[i * 16 + j];
+				}
+				else
+				{
+					if (data_help[i * 16 + j] == '1')
+					{
+						data[i * 16 + j] = '0';
+					}
+					else if (data_help[i * 16 + j] == '0')
+					{
+						data[i * 16 + j] = '1';
+					}
+				}
+			}
+			else
+			{
+				data[i * 16 + j] = '0';
+			}
+		}
+		// encrypt by prev result
+		if (i == 0)
+		{
+			data[0] = start_vector[0];
+			data[15] = start_vector[7];
+		}
+		else if (i != 0)
+		{
+			for (int j = 0; j < 16; j++) {
+				data[i * 16 + j] = data[(i - 1) * 16 + j];
+				data[i * 16 + j] = data[(i - 1) * 16 + j];
+			}
+		}
+	}
+
+	std::cout << '\n';
+	std::cout << data;
+
+	return data;
+}
+
+
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
+	string wdata;
+	string rdata;
+	rdata = read_input_file();
+
+	// lab2
+	// simple replacement mode
+	string key = "1001100101101110111100101000011111101001101111101000011011011110";
+	wdata = ECB(rdata, key);
+
+	// ciphertext block coupling mode
+	string start_vector = "01100110";
+	wdata = CBC(rdata, key, start_vector);
+
+	return 0;
+}
