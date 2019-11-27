@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 string read_input_file()
 {
 	std::string line;
@@ -22,6 +21,28 @@ string read_input_file()
 
 	return line;
 }
+
+
+void write_into_file(string content, int type_of_write)
+{
+	std::ofstream out;
+	// type 0 - encrypt
+	if (type_of_write == 0) {
+		out.open("C:\\Users\\Picasso\\Desktop\\Старая папка\\sem7labs\\msi\\encrypt.txt");
+	}
+	// type 1 - decrypt
+	else if (type_of_write == 1) {
+		out.open("C:\\Users\\Picasso\\Desktop\\Старая папка\\sem7labs\\msi\\decrypt.txt");
+	}
+
+	/*
+	if (out.is_open())
+	{
+		out << content << std::endl;
+	}
+	*/
+}
+
 
 string key_xor(string str, string key, int mod)
 {
@@ -46,15 +67,15 @@ string key_xor(string str, string key, int mod)
 }
 
 
-void lab1(string inp_data)
+std::string DES(string inp_data, string inp_key)
 {
-	string data = inp_data;
+	string data_help = inp_data;
 	std::cout << '\n';
-	std::cout << data;
+	std::cout << data_help;
 
 	// IP transposition
 	int IP_tr[64] = {0,1,2,23,4,5,6,7,47,61,10,11,12,13,14,15,16,17,18,20,36,22,3,24,25,26,27,28,29,30,31,32,33,34,35,21,37,38,39,40,41,42,43,44,45,46,8,48,49,50,51,52,53,63,55,56,57,58,59,60,9,62,54};
-	string data_help = data;
+	string data = data_help;
 	for (int i = 0; i < 64; i++) {
 		data[i] = data_help[IP_tr[i]];
 	}
@@ -62,7 +83,7 @@ void lab1(string inp_data)
 	std::cout << data;
 
 	// 56bit key
-	string key = "10011001011011101111001010000111111010011011111010000110";
+	string key = inp_key;
 
 	// halve key
 	string hkey[2];
@@ -110,6 +131,11 @@ void lab1(string inp_data)
 	for (int i = 0; i < 16; i++) {
 		data = key_xor(data, t2key[i], i);
 	}
+
+	std::cout << '\n';
+	std::cout << data;
+
+	return data;
 }
 
 
@@ -118,10 +144,17 @@ int main()
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
-	string data;
-	data = read_input_file();
+	string wdata;
+	string rdata;
+	rdata = read_input_file();
 
-	lab1(data);
+	string key1 = "10011001011011101111001010000111111010011011111010000110";
+	string key2 = "10010001001011101101000111100110101010011011010010111111";
+	string key3 = "11111001011111101111001010000100110010011011111010010100";
+
+	wdata = DES(rdata, key1);
+	wdata = DES(wdata, key2);
+	wdata = DES(wdata, key3);
 
 	std::cout << '\n';
 
