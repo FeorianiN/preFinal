@@ -1,0 +1,129 @@
+#include <Windows.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+
+string read_input_file()
+{
+	std::string line;
+
+	std::ifstream in("C:\\Users\\Picasso\\Desktop\\Старая папка\\sem7labs\\msi\\input.txt");
+	if (in.is_open())
+	{
+		while (getline(in, line))
+		{
+			std::cout << line << std::endl;
+		}
+	}
+	in.close();
+
+	return line;
+}
+
+string key_xor(string str, string key, int mod)
+{
+	string final_str = str;
+
+	for (int i = 0; i < key.length(); i++) {
+		if (final_str[i + mod] == '0' && key[i] == '0') {
+			final_str[i + mod] = '0';
+		}
+		else if (final_str[i + mod] == '0' && key[i] == '1') {
+			final_str[i + mod] = '1';
+		}
+		else if (final_str[i + mod] == '1' && key[i] == '0') {
+			final_str[i + mod] = '1';
+		}
+		else if (final_str[i + mod] == '1' && key[i] == '1') {
+			final_str[i + mod] = '0';
+		}
+	}
+
+	return final_str;
+}
+
+
+void lab1(string inp_data)
+{
+	string data = inp_data;
+	std::cout << '\n';
+	std::cout << data;
+
+	// IP transposition
+	int IP_tr[64] = {0,1,2,23,4,5,6,7,47,61,10,11,12,13,14,15,16,17,18,20,36,22,3,24,25,26,27,28,29,30,31,32,33,34,35,21,37,38,39,40,41,42,43,44,45,46,8,48,49,50,51,52,53,63,55,56,57,58,59,60,9,62,54};
+	string data_help = data;
+	for (int i = 0; i < 64; i++) {
+		data[i] = data_help[IP_tr[i]];
+	}
+	std::cout << '\n';
+	std::cout << data;
+
+	// 56bit key
+	string key = "10011001011011101111001010000111111010011011111010000110";
+
+	// halve key
+	string hkey[2];
+	int key_length = key.length();
+	for (int i = 0; i < key_length/2; i++) {
+		hkey[0] = hkey[0] + key[i];
+	}
+	for (int i = key_length/2; i < key_length; i++) {
+		hkey[1] = hkey[1] + key[i];
+	}
+	std::cout << '\n';
+	std::cout << hkey[0];
+	std::cout << '\n';
+	std::cout << hkey[1];
+	std::cout << '\n';
+
+	// shifts and forming 16 24b keys
+	string t1key[16], t2key[16];
+	for (int i = 0; i < 16; i++) {
+		for (int j = 0; j < 28; j++) {
+			if (t1key[i].length() < 24) {
+				if (i + j < 28) {
+					t1key[i] = t1key[i] + hkey[0][i + j];
+					t2key[i] = t2key[i] + hkey[1][i + j];
+				}
+				else {
+					t1key[i] = t1key[i] + hkey[0][i + j - 28];
+					t2key[i] = t2key[i] + hkey[1][i + j - 28];
+				}
+			}
+		}
+	}
+	std::cout << '\n';
+	for (int i = 0; i < 16; i++) {
+		std::cout << t1key[i];
+		std::cout << '\n';
+	}
+
+	// xor 1st part of keys and data
+	for (int i = 0; i < 16; i++) {
+		data = key_xor(data, t1key[i], i);
+	}
+
+	// xor 2nd part of keys and data
+	for (int i = 0; i < 16; i++) {
+		data = key_xor(data, t2key[i], i);
+	}
+}
+
+
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
+	string data;
+	data = read_input_file();
+
+	lab1(data);
+
+	std::cout << '\n';
+
+	return 0;
+}
