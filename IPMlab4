@@ -1,0 +1,55 @@
+int ar(int p)
+{
+	int help[10] = {0,0,0,0,0,0,0,0,0,0};
+	int count = 0;
+	for (int i = 2; i < p; i++) {
+		if ((p - 1) % i == 0)
+		{
+			help[count] = i;
+			count++;
+		}
+	}
+
+	int ret = 0;
+	for (int i = 2; i < p; i++) {
+		int flag = 0;
+		for (int j = 0; j < 100; j++) {
+			if ((help[j] != 0) && (int(pow(i, help[j]) - 1) % p == 0))
+			{
+				flag == 1;
+			}
+		}
+		if (flag == 0)
+		{
+			ret = i;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+float* ElGamal()
+{
+	int data = 10; // data < p
+
+	// keygen
+	int p = 11;
+	int g = ar(p); // antiderivative root p
+	int x = 8; // 1 < x < p - 1
+
+	float y = pow(g, x);
+	y = int(y) % p;
+
+	float public_key = y;
+	int private_key = x;
+
+	int k = 4; // 1 < k < p - 1
+	float a[2];
+	a[0] = pow(g, k);
+	a[0] = int(a[0]) % p;
+	a[1] = pow(y, k);
+	a[1] = int(a[1] * data) % p;
+
+	return a;
+}
