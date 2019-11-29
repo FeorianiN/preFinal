@@ -63,24 +63,24 @@ std::string HMAC(string inp_data, string inp_key)
 	}
 	std::cout << "key = " << key << std::endl;
 
-	string si;
-	string ipad = "1111100101111000111100101011011100101001101111101110011111001110";
+	string si = "000000000000000000000000000000000000000000000000000000000000000";
+	string ipad = "111110010111100011110010101101110010100110111110111001111100111";
 	for (int i = 0; i < b; i++) {
-		si = key_xor(key, ipad, i);
+		si = key_xor(key, ipad, 0);
 	}
 	std::cout << "si = " << si << std::endl;
 
-	string s0;
-	string opad = "0000100101111000111100101011010100101001101000101110011000001111";
+	string s0 = "000000000000000000000000000000000000000000000000000000000000000";
+	string opad = "000010010111100011110010101101010010100110100010111001100000111";
 	for (int i = 0; i < b; i++) {
-		s0 = key_xor(key, opad, i);
+		s0 = key_xor(key, opad, 0);
 	}
 	std::cout << "s0 = " << s0 << std::endl;
 
 	string data = inp_data + si;
 	// hash-function
 	for (int i = 0; i < data.length(); i = i + 2) {
-		if (int(inp_data[i]) % 2 == 0)
+		if (int(data[i]) % 2 == 0)
 		{
 			data.erase(i, 1);
 		}
