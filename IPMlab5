@@ -1,0 +1,98 @@
+string key_xor(string str, string key, int mod)
+{
+	string final_str = str;
+
+	for (int i = 0; i < key.length(); i++) {
+		if (final_str[i + mod] == '0' && key[i] == '0') {
+			final_str[i + mod] = '0';
+		}
+		else if (final_str[i + mod] == '0' && key[i] == '1') {
+			final_str[i + mod] = '1';
+		}
+		else if (final_str[i + mod] == '1' && key[i] == '0') {
+			final_str[i + mod] = '1';
+		}
+		else if (final_str[i + mod] == '1' && key[i] == '1') {
+			final_str[i + mod] = '0';
+		}
+	}
+
+	return final_str;
+}
+
+
+std::string HMAC(string inp_data, string inp_key)
+{
+	std::cout << "inp_key = " << inp_key << std::endl;
+
+	// check inp_key length and correct it
+	int b = 64;
+	string key;
+	if (inp_key.length() == b)
+	{
+		key = inp_key;
+		std::cout << "inp_key = b" << std::endl;
+	}
+	else if (inp_key.length() < b)
+	{
+		key = inp_key;
+		while (key.length() < b)
+		{
+			key = key + "0";
+		}
+		std::cout << "inp_key < b" << std::endl;
+	}
+	else if (inp_key.length() > b)
+	{
+		key = inp_key;
+		while (key.length() > b)
+		{
+			// hash-function
+			for (int i = 0; i < key.length(); i = i + 2) {
+				if (int(inp_key[i]) % 2 == 0)
+				{
+					key.erase(i, 1);
+				}
+			}
+		}
+		while (key.length() < b)
+		{
+			key = key + "0";
+		}
+		std::cout << "inp_key > b" << std::endl;
+	}
+	std::cout << "key = " << key << std::endl;
+
+	string si;
+	string ipad = "1111100101111000111100101011011100101001101111101110011111001110";
+	for (int i = 0; i < b; i++) {
+		si = key_xor(key, ipad, i);
+	}
+	std::cout << "si = " << si << std::endl;
+
+	string s0;
+	string opad = "0000100101111000111100101011010100101001101000101110011000001111";
+	for (int i = 0; i < b; i++) {
+		s0 = key_xor(key, opad, i);
+	}
+	std::cout << "s0 = " << s0 << std::endl;
+
+	string data = inp_data;
+
+	return data;
+}
+
+
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
+	// lab5
+	// HMAC
+	string key = "10011001011011101111001010000111111010011011111010000110110111100";
+	string data = "00001110001011010001110100001110001011100001111000001110110001111";
+	HMAC(data, key);
+
+	return 0;
+}
