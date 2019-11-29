@@ -77,7 +77,24 @@ std::string HMAC(string inp_data, string inp_key)
 	}
 	std::cout << "s0 = " << s0 << std::endl;
 
-	string data = inp_data;
+	string data = inp_data + si;
+	// hash-function
+	for (int i = 0; i < data.length(); i = i + 2) {
+		if (int(inp_data[i]) % 2 == 0)
+		{
+			data.erase(i, 1);
+		}
+	}
+	data = data + s0;
+	// hash-function
+	for (int i = 0; i < data.length(); i = i + 2) {
+		if (int(data[i]) % 2 == 0)
+		{
+			data.erase(i, 1);
+		}
+	}
+
+	std::cout << "data atfer conversion = " << data << std::endl;
 
 	return data;
 }
