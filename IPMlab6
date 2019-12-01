@@ -1,0 +1,50 @@
+std::string Hash_Stribog(string inp_data)
+{
+	int n = 8;
+	string data = inp_data;
+	if (data.length() > n)
+	{
+		for (int i = 0; i < data.length(); i = i + 8) {
+			data.insert(n+i, "-"); 
+		}
+	}
+
+	return data;
+}
+
+
+std::string EDS(string inp_data)
+{
+	std::cout << "inp_data = " << inp_data << std::endl;
+
+	int p = 13;
+
+	// elliptic curve
+	int a = 2;
+	int b = 3;
+	float J = int(1728 * (4 * pow(a, 3) / (4 * pow(a, 3) + 27 * pow(b, 2)))) % p;
+
+	int m = 5;
+	int q = 11;
+
+	// encrypt data
+	string data = Hash_Stribog(inp_data);
+
+	std::cout << "hashed data = " << data << std::endl;
+
+	return data;
+}
+
+
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+  
+  	// lab6
+	// EDS
+	string data = "00001110001011000001111000001110110001111";
+	EDS(data);
+
+	return 0;
+}
